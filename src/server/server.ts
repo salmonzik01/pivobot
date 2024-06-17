@@ -5,13 +5,13 @@ import Router from "koa-router";
 import { transformInitData, validate } from "./../helpers/tgAuth";
 import { bot } from "./../bot/bot";
 import bodyParser from "koa-bodyparser";
+import { env } from "../helpers/env";
 
 export const app = new Koa();
 
 app.use(bodyParser({}));
 
 const staticDirPath = path.join(__dirname, "../..", "public");
-console.log("path:", staticDirPath);
 app.use(serve(staticDirPath));
 
 const router = new Router();
@@ -29,7 +29,7 @@ router.post("/api/sendAnswer", async (ctx, next) => {
 
   // Check authorization with Telegram
   let transfromedInitData = transformInitData(initData);
-  const isValid = await validate(transfromedInitData, "2200642691:AAGGJx_0n5cBHgEiHLXH55bnr-Dsb4hGrkw");
+  const isValid = await validate(transfromedInitData, env.BOT_TOKEN);
   if (!isValid) {
     ctx.status = 403;
     return next();

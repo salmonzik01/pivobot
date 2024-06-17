@@ -1,12 +1,13 @@
 import { Bot, InlineKeyboard } from "grammy";
+import { env } from "./../helpers/env";
 
-export const bot = new Bot("2200642691:AAGGJx_0n5cBHgEiHLXH55bnr-Dsb4hGrkw", {
-  client: { environment: "test" },
+export const bot = new Bot(env.BOT_TOKEN, {
+  client: { environment: env.DEPLOYMENT_TYPE },
 });
 
 const magicButton = new InlineKeyboard().webApp(
   "💫 Tap!",
-  "http://172.23.229.98:3000/" + "index.html"
+  "http://172.23.229.98:3000/" + "index.html" // Поменять на свою ссылку
 );
 
 bot.command("start", async (ctx) => {
@@ -17,7 +18,7 @@ bot.command("start", async (ctx) => {
 
 bot.on(":web_app_data", (ctx) => {
   const data = ctx.message!.web_app_data.data;
-  console.log('pong')
+  console.log("pong");
   return ctx.reply(data);
 });
 
