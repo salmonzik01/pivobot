@@ -1,5 +1,5 @@
 import { bot } from "./bot/bot";
-import { app } from "./server/server";
+import runServer from "./server/server";
 import runMongo from "./db/mongo";
 
 (async () => {
@@ -10,5 +10,5 @@ import runMongo from "./db/mongo";
     onStart: (botInfo) => console.log(`${botInfo.username} is up and running!`),
   });
 
-  app.listen(3000, () => console.log("Server is up and running!"));
+  await runServer();
 })();
