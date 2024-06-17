@@ -6,6 +6,7 @@ import { transformInitData, validate } from "./../helpers/tgAuth";
 import { bot } from "./../bot/bot";
 import bodyParser from "koa-bodyparser";
 import { env } from "../helpers/env";
+import { z } from "zod";
 
 export const app = new Koa();
 
@@ -14,40 +15,50 @@ app.use(bodyParser({}));
 const staticDirPath = path.join(__dirname, "../..", "public");
 app.use(serve(staticDirPath));
 
-const router = new Router();
+const router = new Router<{}, { initData: { [k: string]: string } }>({
+  prefix: "/api",
+});
 
-router.post("/api/sendAnswer", async (ctx, next) => {
-  const data = ctx.request.body as { _auth: string, result: number };
-  const COUNT_OF_QUESTIONS = 3;
+router.use(async (ctx, next) => {
+  const data = ctx.request.body as { _auth: string };
 
-  // If has not auth data - send Bad Request
-  let initData = data._auth;
-  if (!initData) {
-    ctx.status = 400;
+  const initData = data._auth;
+
+  if (!initData) return (ctx.status = 400);
+
+  const transformedInitData = transformInitData(initData);
+  const isValid = await validate(transformedInitData, env.BOT_TOKEN);
+
+  if (!isValid) return (ctx.status = 403);
+
+  ctx.initData = transformedInitData;
+
+  await next();
+});
+
+router.get("/test", async (ctx) => {
+  console.log(ctx);
+});
+
+const DrinkBeer = z.object({
+  liters: z.string(),
+});
+router.post("/drinkBeer", async (ctx, next) => {
+  let data;
+  try {
+    data = DrinkBeer.parse(ctx.request.body);
+  } catch (err) {
     return next();
   }
 
-  // Check authorization with Telegram
-  let transfromedInitData = transformInitData(initData);
-  const isValid = await validate(transfromedInitData, env.BOT_TOKEN);
-  if (!isValid) {
-    ctx.status = 403;
-    return next();
-  }
-
-  console.log(1)
-  // Reply to user
-  await bot.api.answerWebAppQuery(transfromedInitData['query_id'], {
+  await bot.api.answerWebAppQuery(ctx.initData["query_id"], {
     type: "article",
     id: "1",
     title: "Title", // empty
     input_message_content: {
-      message_text: `Right answers: ${data.result} of ${COUNT_OF_QUESTIONS}`,
+      message_text: `${data.liters}`,
     },
   });
-  console.log(2)
-
-  ctx.status = 200;
 });
 
 app.use(router.routes());

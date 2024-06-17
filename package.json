@@ -19,7 +19,8 @@
     "koa-static": "^5.0.0",
     "mongoose": "^8.4.1",
     "tsconfig-paths": "^4.2.0",
-    "type": "^2.7.3"
+    "type": "^2.7.3",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/koa": "^2.15.0",
