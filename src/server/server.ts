@@ -37,7 +37,7 @@ router.post("/api/sendAnswer", async (ctx, next) => {
 
   console.log(1)
   // Reply to user
-  await bot.api.answerWebAppQuery(transfromedInitData.query_id, {
+  await bot.api.answerWebAppQuery(transfromedInitData['query_id'], {
     type: "article",
     id: "1",
     title: "Title", // empty

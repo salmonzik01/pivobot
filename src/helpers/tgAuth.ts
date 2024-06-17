@@ -47,5 +47,5 @@ export async function validate(
     .map((b) => b.toString(16).padStart(2, "0"))
     .join("");
 
-  return data.hash === hex;
+  return data['hash'] === hex;
 }
