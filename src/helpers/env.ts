@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-import { cleanEnv, port, str, num } from "envalid";
+import dotenv from "dotenv";
+import { cleanEnv, str, num } from "envalid";
 
 dotenv.config();
 export const env = cleanEnv(process.env, {
@@ -7,4 +7,5 @@ export const env = cleanEnv(process.env, {
   BOT_TOKEN: str(),
   DATABASE_URL: str(),
   PORT: num(),
+  ETHERNET_INTERFACE: str({ default: "" }),
 });

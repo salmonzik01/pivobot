@@ -29,26 +29,3 @@ beer.addEventListener("click", (e) => {
     }).then(() => Telegram.WebApp.close());
   }
 });
-
-// // If user visited by not inline keyboard we can't reply him with backend
-// if (!initData) {
-//   const result = `Right answers: ${rightAsnwersCounter} of ${MAX_QUESTIONS}`;
-//   Telegram.WebApp.sendData(result);
-//   Telegram.WebApp.close();
-// } else {
-//   const data = JSON.stringify({
-//     _auth: initData,
-//     result: rightAsnwersCounter,
-//   });
-
-//   fetch('/api/sendAnswer', {
-//     method: 'POST',
-//     headers: {
-//       Accept: 'application/json',
-//       'Content-Type': 'application/json',
-//     },
-//     body: data,
-//   }).then((res) => {
-//     const response = res.json();
-//   });
-// }

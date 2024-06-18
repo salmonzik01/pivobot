@@ -1,19 +1,20 @@
 import { Bot, InlineKeyboard } from "grammy";
 import { env } from "./../helpers/env";
 import { findOrCreate } from "../db/models/User";
+import getWSLIp from "../helpers/getWSLIp";
 
 export const bot = new Bot(env.BOT_TOKEN, {
   client: { environment: env.DEPLOYMENT_TYPE },
 });
 
-const magicButton = new InlineKeyboard().webApp(
-  "💫 Tap!",
-  "http://172.23.229.98:3000/" + "index.html" // Поменять на свою ссылку
-);
+async function magicButton() {
+  const api = await getWSLIp();
+  return new InlineKeyboard().webApp("💫 Tap!", api + "index.html");
+}
 
 bot.command("start", async (ctx) => {
   await ctx.reply("Hello, there!", {
-    reply_markup: magicButton,
+    reply_markup: await magicButton(),
   });
 });
 
