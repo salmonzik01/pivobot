@@ -1,8 +1,24 @@
+/* Переменные */
 :root {
   --background-color: #000000;
   --main-color: #1c1f24;
   --container-color: #272a2f;
   --accent-color: #ffd700;
+}
+
+/* Запрет на выделение текста */
+* {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                        supported by Chrome and Opera */
+}
+/* Запрет на выделенее картинок */
+img {
+  pointer-events: none;
 }
 
 body {
@@ -46,7 +62,7 @@ header span {
 }
 
 main {
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   border-top-left-radius: 40px;
   border-top-right-radius: 40px;
   border-top: 2px solid var(--accent-color);
@@ -136,14 +152,50 @@ main {
 
 footer {
   background-color: var(--main-color);
-  height: 10%;
+  height: 12%;
 }
 
-.footer-container {
+footer .container {
   height: 100%;
+  width: auto;
   background-color: var(--container-color);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   margin-left: 10px;
   margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+footer .item {
+  color: white;
+  margin: 5px;
+  margin-bottom: 7px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 25%;
+  height: auto;
+  font-weight: 500;
+  color: #4c4c4c
+}
+
+footer .item.active {
+  background-color: var(--main-color);
+  border-radius: 20px;
+  color: white;
+  transition: color 0.3s ease-in-out;
+}
+
+footer img {
+  filter: invert(70%);
+  width: 30%;
+  padding-bottom: 0.1rem;
+  height: auto;
+}
+
+footer .item.active img {
+  transition: filter 0.3s ease-in-out;
+  filter: none;
 }

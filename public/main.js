@@ -1,12 +1,31 @@
-// Set bot to ready state
+// Объявлении боту о готовности
 Telegram.WebApp.ready();
 
-// Get personalized data from Telegram
+// Получения данных от телеграмма
 let initData = Telegram.WebApp.initData || "";
 
+//
 const username = document.querySelector("header span");
 const liters = document.querySelector(".pivo-container .amount");
 const beer = document.querySelector(".clicker");
+
+// Кнопки для футера
+const footerBtns = document.querySelectorAll("footer .item");
+const statsBtn = footerBtns[0];
+const storeBtn = footerBtns[1];
+const starBtn = footerBtns[2];
+const cogBtn = footerBtns[3];
+
+let activeBtn = cogBtn;
+
+footerBtns.forEach((btn) =>
+  btn.addEventListener("click", (e) => {
+    activeBtn.classList.remove("active");
+    activeBtn = btn;
+    activeBtn.classList.add("active");
+    console.log('clicked', btn)
+  })
+);
 
 async function get(url, data = {}) {
   const body = JSON.stringify({
@@ -48,9 +67,9 @@ async function post(url, data = {}) {
   });
 }
 
-let beerTrashhold = 0
+let beerTrashhold = 0;
 function sendClicks() {
-  post('/api/drinkBeer', { liters: beerTrashhold });
+  post("/api/drinkBeer", { liters: beerTrashhold });
   beerTrashhold = 0;
 }
 
@@ -60,15 +79,15 @@ beer.addEventListener("click", (e) => {
   beerTrashhold += 1;
   liters.innerHTML = parseInt(liters.innerHTML) + 1;
 
-  beer.classList.remove('onclick'); // reset animation
+  beer.classList.remove("onclick"); // reset animation
   void beer.offsetWidth; // trigger reflow
-  beer.classList.add('onclick'); // start animation
+  beer.classList.add("onclick"); // start animation
 });
 
 async function main() {
   const userInfo = await post("/api/getUser");
 
-  console.log(userInfo)
+  console.log(userInfo);
 
   username.innerHTML = userInfo.userId;
   liters.innerHTML = userInfo.litersOfBeer;
