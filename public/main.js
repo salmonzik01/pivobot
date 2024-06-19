@@ -4,9 +4,9 @@ Telegram.WebApp.ready();
 // Get personalized data from Telegram
 let initData = Telegram.WebApp.initData || "";
 
-const username = document.querySelector(".username");
-const liters = document.querySelector(".liters");
-const beer = document.querySelector(".beer img");
+const username = document.querySelector("header span");
+const liters = document.querySelector(".pivo-container .amount");
+const beer = document.querySelector(".clicker");
 
 async function get(url, data = {}) {
   const body = JSON.stringify({
@@ -59,23 +59,10 @@ setInterval(sendClicks, 5000);
 beer.addEventListener("click", (e) => {
   beerTrashhold += 1;
   liters.innerHTML = parseInt(liters.innerHTML) + 1;
-  // liters.innerHTML = parseInt(liters.innerHTML) + 1;
 
-  // if (liters.innerHTML > 5) {
-  //   const data = JSON.stringify({
-  //     _auth: initData,
-  //     liters: liters.innerHTML,
-  //   });
-
-  //   fetch("/api/drinkBeer", {
-  //     method: "POST",
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: data,
-  //   }).then(() => Telegram.WebApp.close());
-  // }
+  beer.classList.remove('onclick'); // reset animation
+  void beer.offsetWidth; // trigger reflow
+  beer.classList.add('onclick'); // start animation
 });
 
 async function main() {

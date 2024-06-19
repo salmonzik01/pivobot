@@ -49,13 +49,13 @@ export default async function runServer() {
   app.use(router.routes());
   app.use(router.allowedMethods());
 
-  return new Promise<Server>((resolve, reject) => {
+  return new Promise<Server>((res, rej) => {
     const connection = app
       .listen(env.PORT)
       .on("listening", () => {
         console.log(`HTTP is listening on ${env.PORT}`);
-        resolve(connection);
+        res(connection);
       })
-      .on("error", reject);
+      .on("error", rej);
   });
 }
