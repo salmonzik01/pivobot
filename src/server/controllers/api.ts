@@ -1,7 +1,7 @@
-import { Body, Controller, Ctx, Post } from "amala";
+import { Body, Controller, Ctx, Get, Post } from "amala";
 import { Context } from "koa";
 import DrinkBeer from "../validators/drinkBeer";
-import { bot } from "./../../bot/bot";
+import { findOrCreate } from "./../../db/models/User";
 
 @Controller("/api")
 export default class ApiController {
@@ -10,18 +10,25 @@ export default class ApiController {
     @Ctx() ctx: Context,
     @Body({ required: true }) body: DrinkBeer
   ) {
-    await bot.api.answerWebAppQuery(ctx["initData"]["query_id"], {
-      type: "article",
-      id: "1",
-      title: "Title", // empty
-      input_message_content: {
-        message_text: `${body.liters}`,
-      },
-    });
+    const user = await findOrCreate(JSON.parse(ctx["initData"].user).id);
+
+    user.litersOfBeer += parseInt(body.liters);
+    user.save();
+
+    // await bot.api.answerWebAppQuery(ctx["initData"]["query_id"], {
+    //   type: "article",
+    //   id: "1",
+    //   title: "Title", // empty
+    //   input_message_content: {
+    //     message_text: `${body.liters}`,
+    //   },
+    // });
   }
 
-  @Post("/test")
-  async test(/*@Ctx() ctx: Context*/) {
-    console.log('test successfull')
+  @Post("/getUser")
+  async getUser(@Ctx() ctx: Context) {
+    const user = await findOrCreate(JSON.parse(ctx["initData"].user).id);
+
+    return user;
   }
 }

@@ -5,7 +5,7 @@ export class User {
   userId!: string;
 
   @prop({ default: 0 })
-  litersOfBeer?: number;
+  litersOfBeer!: number;
 }
 
 export const UserModel = getModelForClass(User);
@@ -16,8 +16,6 @@ export async function findOrCreate(userId: string) {
     {},
     { new: true, upsert: true }
   );
-
-  console.log(user);
 
   return user;
 }
